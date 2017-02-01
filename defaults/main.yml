@@ -4,6 +4,9 @@ kafka:
   apache_mirror: http://apache.mirror.anlx.net/
   auto_create_topics: "false"
   conf_dir: /home/kafka/etc
+  controlled_shutdown_enable: true
+  controlled_shutdown_max_retries: 3
+  controlled_shutdown_retry_backoff_ms: 2000
   data_dir: /home/kafka/data
   default_replication_factor: 1
   group: kafka
