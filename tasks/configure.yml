@@ -39,6 +39,15 @@
         data: "{{ aws_cluster_autodiscover.stdout | from_json }}"
   when: kafka.aws_cluster_autodiscover.enabled
 
+- name: Export broker ID to local file
+  become: yes
+  become_user: "{{ kafka.user }}"
+  lineinfile:
+    create: yes
+    dest: "/home/{{ kafka.user }}/etc/brokerId"
+    line: "{{ kafka.aws_cluster_autodiscover.data.id }}"
+  when: kafka.aws_cluster_autodiscover.enabled
+
 - name: Setup environment config
   become: yes
   become_user: "{{ kafka.user }}"
