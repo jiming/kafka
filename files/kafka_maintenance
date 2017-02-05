@@ -1,0 +1,64 @@
+#!/bin/bash
+# DRAFT
+
+# Replace BIN path with Ansible
+KAFKA="/home/kafka"
+BIN="$KAFKA/kafka/bin"
+LOG="$KAFKA/log/shutdown.log"
+TMP_DIR="/tmp"
+ZK_URL="zookeeper.app.internal"
+ZK_PORT="2181"
+CO="__consumer_offsets"
+PC="PartitionCount"
+RF="ReplicationFactor"
+broker_id=`cat $KAFKA/etc/brokerId` # This node
+brokers_all=`echo "ls /brokers/ids"|$BIN/zookeeper-shell.sh $ZK_URL:$ZK_PORT|tail -1| sed 's/,//g'| sed 's/\[//'| sed 's/\]//'`
+brokers_available=`echo "ls /brokers/ids"|$BIN/zookeeper-shell.sh $ZK_URL:$ZK_PORT|tail -1| sed 's/,//g'| sed 's/\[//'| sed 's/\]//'| sed -e "s/$broker_id//"` 
+topics=`$BIN/kafka-topics.sh --list --zookeeper $ZK_URL:$ZK_PORT|grep -v "__consumer_offsets"`
+
+echo "Broker ID" $broker_id
+echo "All brokers" ${brokers_all}
+echo "Available brokers: $brokers_available"
+echo "Topics:" $topics
+
+read -a brokers <<< $brokers_available
+
+echo "Kafka server broker: $broker_id shutdown" > $LOG
+
+prepare_json () {
+      for t in ${topics}; do
+          topic_partitions=`$BIN/kafka-topics.sh --describe --zookeeper $ZK_URL:$ZK_PORT|grep -v $CO| grep $t|grep $PC|awk '{print $2}'| cut -f2 -d ":"`
+          replication_factor=`$BIN/kafka-topics.sh --describe --zookeeper $ZK_URL:$ZK_PORT|grep -v $CO| grep $t|grep $RF|awk '{print $3}'| cut -f2 -d ":"`
+          echo $t # topics
+          echo -e "\t\t\tTopic partitions" $topic_partitions
+          echo -e "\t\t\tReplication factor" $replication_factor
+          echo "{\"version\":1,\"partitions\":[" > $TMP_DIR/$t
+          for (( p = 0; p < $topic_partitions; p++ )) ; do
+              for ((index=0; index <= ${#brokers[@]}; index++)); do
+                     echo \{\"topic\"\:\"$t\"\,\"partition\"\:${p}\,\"replicas\"\:[${brokers[$index]},${brokers[$index+1]},${brokers[$index+2]}\]\}, #>> $TMP_DIR/$t
+                     break
+              done
+                  p=$(( $p + 1 ))
+                  if [ $p -eq $topic_partitions ]; then
+                     break
+                  fi
+              for ((index=1; index <= ${#brokers[@]}; index++)); do
+                     echo \{\"topic\"\:\"$t\"\,\"partition\"\:${p}\,\"replicas\"\:[${brokers[$index]},${brokers[$index+1]},${brokers[$index+2]}\]\}, #>> $TMP_DIR/$t
+                     break
+              done
+          done
+          sed -i '$s/,$/\]\}/' $TMP_DIR/$t
+      done
+}
+
+reassign-partitions () {
+       for t in ${topics}; do
+           echo $t 
+           $BIN/kafka-reassign-partitions.sh --zookeeper $ZK_URL:$ZK_PORT --reassignment-json-file $TMP_DIR/$t --execute >> $LOG
+       done
+}
+prepare_json
+#reassign-partitions
+
+cp kafka_maintenance /tmp
+chown robert.wojdacki /tmp/kafka_maintenance

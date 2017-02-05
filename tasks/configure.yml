@@ -93,6 +93,16 @@
     state: started
     timeout: 120
 
+- name: Copy Kafka maintenance script
+  become: yes
+  become_user: "{{ kafka.user }}"
+  copy:
+    src: "kafka_maintenance"
+    dest: "/home/{{ kafka.user }}/bin/kafka_maintenance"
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
+    mode: 0750
+
 - name: Copy Kafka stop script
   become: yes
   copy:
