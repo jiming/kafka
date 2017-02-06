@@ -91,7 +91,7 @@
   wait_for:
     port: "{{ kafka.port }}"
     state: started
-    timeout: 120
+    timeout: 60
 
 - name: Copy Kafka maintenance script
   become: yes

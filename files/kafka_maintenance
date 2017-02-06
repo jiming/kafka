@@ -35,7 +35,7 @@ prepare_json () {
           echo "{\"version\":1,\"partitions\":[" > $TMP_DIR/$t
           for (( p = 0; p < $topic_partitions; p++ )) ; do
               for ((index=0; index <= ${#brokers[@]}; index++)); do
-                     echo \{\"topic\"\:\"$t\"\,\"partition\"\:${p}\,\"replicas\"\:[${brokers[$index]},${brokers[$index+1]},${brokers[$index+2]}\]\}, #>> $TMP_DIR/$t
+                     echo \{\"topic\"\:\"$t\"\,\"partition\"\:${p}\,\"replicas\"\:[${brokers[$index]},${brokers[$index+1]},${brokers[$index+2]}\]\}, >> $TMP_DIR/$t
                      break
               done
                   p=$(( $p + 1 ))
@@ -43,7 +43,7 @@ prepare_json () {
                      break
                   fi
               for ((index=1; index <= ${#brokers[@]}; index++)); do
-                     echo \{\"topic\"\:\"$t\"\,\"partition\"\:${p}\,\"replicas\"\:[${brokers[$index]},${brokers[$index+1]},${brokers[$index+2]}\]\}, #>> $TMP_DIR/$t
+                     echo \{\"topic\"\:\"$t\"\,\"partition\"\:${p}\,\"replicas\"\:[${brokers[$index]},${brokers[$index+1]},${brokers[$index+2]}\]\}, >> $TMP_DIR/$t
                      break
               done
           done
@@ -58,7 +58,5 @@ reassign-partitions () {
        done
 }
 prepare_json
-#reassign-partitions
+reassign-partitions
 
-cp kafka_maintenance /tmp
-chown robert.wojdacki /tmp/kafka_maintenance
