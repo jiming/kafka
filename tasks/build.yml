@@ -1,10 +1,5 @@
 ---
 
-- name: Install OpenJDK
-  become: yes
-  apt:
-    name: openjdk-7-jre-headless
-
 - name: Ensure install folders
   become: yes
   become_user: "{{ kafka.user }}"
