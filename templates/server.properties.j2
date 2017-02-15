@@ -13,13 +13,13 @@ listeners=PLAINTEXT://:{{ kafka_port }}
 port={{ kafka_port }}
 
 # Hostname the broker will bind to. If not set, the server will bind to all interfaces
-{% if kafka.listen_address is defined %}
+{% if kafka_listen_address is defined %}
 host.name={{ kafka_listen_address }}
 {% endif %}
 
-{% if kafka.aws_cluster_autodiscover.data is defined %}
+{% if kafka_aws_cluster_autodiscover.data is defined %}
 advertised.host.name={{ kafka_aws_cluster_autodiscover.data.hostname }}
-{% elif kafka.advertised_host_name is defined %}
+{% elif kafka_advertised_host_name is defined %}
 advertised.host.name={{ kafka_advertised_host_name }}
 {% endif %}
 
