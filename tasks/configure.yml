@@ -13,20 +13,22 @@
 
 - name: Create log4j.properties
   become: True
-  become_user: "{{ kafka.user }}"
   template:
     dest: "{{ kafka.conf_dir }}/log4j.properties"
     mode: 0644
+    owner: {{ kafka.user }}
+    group: {{ kafka.group }}
     src: log4j.properties.j2
   notify:
     - restart kafka
 
 - name: Create server.properties
   become: True
-  become_user: "{{ kafka.user }}"
   template:
     dest: "{{ kafka.conf_dir }}/server.properties"
     mode: 0640
+    owner: {{ kafka.user }}
+    group: {{ kafka.group }}
     src: server.properties.j2
   notify:
     - restart kafka
