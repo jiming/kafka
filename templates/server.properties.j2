@@ -5,11 +5,7 @@
 
 # The id of the broker. This must be set to a unique integer for each broker.
 # If left off one is auto-assigned
-{% if kafka.aws_cluster_autodiscover.data is defined %}
-broker.id={{ kafka_aws_cluster_autodiscover.data.id }}
-{% else %}
 broker.id={{ kafka_id }}
-{% endif %}
 
 ############################# Socket Server Settings #############################
 
