@@ -8,7 +8,8 @@ User={{ kafka_user }}
 Group={{ kafka_group }}
 LimitNOFILE=32768
 Restart=on-failure
-Environment="KAFKA_HEAP_OPTS={{ kafka_heap_opts }}:JMX_PORT={{ kafka_jmx_port }}"
+Environment="JMX_PORT={{ kafka_jmx_port }}"
+Environment="KAFKA_HEAP_OPTS={{ kafka_heap_opts }}"
 ExecStart={{ kafka_app_dir }}/bin/kafka-server-start.sh {{ kafka_conf_dir }}/server.properties
 
 [Install]
