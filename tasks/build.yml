@@ -1,8 +1,7 @@
 ---
 
 - name: Ensure install folders
-  become: yes
-  become_user: "{{ kafka.user }}"
+  become: True
   file:
     state: directory
     path: "{{ item }}"
@@ -19,13 +18,13 @@
 
 
 - name: Fetch kafka binary package
-  become: yes
+  become: True
   get_url:
     dest: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
     url: "{{ kafka.apache_mirror }}/kafka/{{ kafka.version_kafka }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
 
 - name: Uncompress the kafka tar
-  become: yes
+  become: True
   unarchive:
     copy: no
     creates: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
@@ -33,14 +32,14 @@
     src: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
 
 - name: Link kafka to the right version
-  become: yes
+  become: True
   file:
     path: "{{ kafka.app_dir }}"
     src: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
     state: link
 
 - name: link config dir
-  become: yes
+  become: True
   file:
     force: yes
     path: "{{ kafka.conf_dir }}"
@@ -48,13 +47,13 @@
     state: link
 
 - name: create systemd config
-  become: yes
+  become: True
   template: dest=/etc/systemd/system/kafka.service owner=root group=root mode=644 src=kafka.service.j2
   notify:
     - restart kafka
 
 # - name: Create Kafka service
-#   become: yes
+#   become: True
 #   template:
 #     dest: "{{ kafka.upstart_conf }}"
 #     owner: root
@@ -64,7 +63,7 @@
 #     - restart kafka
     
 - name: Ensure Kafka runs on boot
-  become: yes
+  become: True
   service:
     enabled: yes
     name: kafka
