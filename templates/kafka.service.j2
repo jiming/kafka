@@ -4,12 +4,12 @@ After=zookeeper.service
 
 [Service]
 Type=simple
-User={{ kafka.user }}
-Group={{ kafka.group }}
+User={{ kafka_user }}
+Group={{ kafka_group }}
 LimitNOFILE=32768
 Restart=on-failure
-Environment="KAFKA_HEAP_OPTS={{ kafka.heap_opts }}:JMX_PORT={{ kafka.jmx_port }}"
-ExecStart={{ kafka.app_dir }}/bin/kafka-server-start.sh {{ kafka.conf_dir }}/server.properties
+Environment="KAFKA_HEAP_OPTS={{ kafka_heap_opts }}:JMX_PORT={{ kafka_jmx_port }}"
+ExecStart={{ kafka_app_dir }}/bin/kafka-server-start.sh {{ kafka_conf_dir }}/server.properties
 
 [Install]
 WantedBy=multi-user.target

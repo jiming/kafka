@@ -4,7 +4,7 @@
   become: True
   file: 
     state: directory
-    path: "{{ kafka.tarball_location }}"
+    path: "{{ kafka_tarball_location }}"
 
 
 - name: Ensure install folders
@@ -12,44 +12,44 @@
   file:
     state: directory
     path: "{{ item }}"
-    owner: "{{ kafka.user }}"
-    group: "{{ kafka.group }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
     mode: 0755
   with_items:
-    - "{{ kafka.conf_dir }}"
-    - "{{ kafka.data_dir }}"
-    - "{{ kafka.log_dir }}"
-#    - "{{ kafka.app_dir }}"
+    - "{{ kafka_conf_dir }}"
+    - "{{ kafka_data_dir }}"
+    - "{{ kafka_log_dir }}"
+#    - "{{ kafka_app_dir }}"
 
 
 
 - name: Fetch kafka binary package
   become: True
   get_url:
-    dest: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
-    url: "{{ kafka.apache_mirror }}/kafka/{{ kafka.version_kafka }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
+    dest: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
+    url: "{{ kafka_apache_mirror }}/kafka/{{ kafka_version_kafka }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
 
 - name: Uncompress the kafka tar
   become: True
   unarchive:
     copy: no
-    creates: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
-    dest: "{{ kafka.tarball_location }}"
-    src: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
+    creates: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
+    dest: "{{ kafka_tarball_location }}"
+    src: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
 
 - name: Link kafka to the right version
   become: True
   file:
-    path: "{{ kafka.app_dir }}"
-    src: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
+    path: "{{ kafka_app_dir }}"
+    src: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
     state: link
 
 - name: link config dir
   become: True
   file:
     force: yes
-    path: "{{ kafka.conf_dir }}"
-    src: "{{ kafka.app_dir }}/config"
+    path: "{{ kafka_conf_dir }}"
+    src: "{{ kafka_app_dir }}/config"
     state: link
 
 - name: create systemd config
@@ -61,7 +61,7 @@
 # - name: Create Kafka service
 #   become: True
 #   template:
-#     dest: "{{ kafka.upstart_conf }}"
+#     dest: "{{ kafka_upstart_conf }}"
 #     owner: root
 #     mode: 0644
 #     src: kafka.conf.j2
