@@ -2,7 +2,7 @@
 
 # Needed to ensure some services start properly
 # - name: Set hostname
-#   become: yes
+#   become: True
 #   lineinfile:
 #     dest: /etc/hosts
 #     line: "127.0.0.1 {{ ansible_hostname }}"
@@ -12,27 +12,27 @@
 
 
 - name: Create log4j.properties
-  become: yes
+  become: True
   become_user: "{{ kafka.user }}"
   template:
-    dest: "{{ kafka.conf_dir }}/etc/log4j.properties"
+    dest: "{{ kafka.conf_dir }}/log4j.properties"
     mode: 0644
     src: log4j.properties.j2
   notify:
     - restart kafka
 
 - name: Create server.properties
-  become: yes
+  become: True
   become_user: "{{ kafka.user }}"
   template:
-    dest: "/home/{{ kafka.user }}/etc/server.properties"
+    dest: "{{ kafka.conf_dir }}/server.properties"
     mode: 0640
     src: server.properties.j2
   notify:
     - restart kafka
 
 - name: Ensure Kafka is running
-  become: yes
+  become: True
   service:
     name: kafka
     state: started

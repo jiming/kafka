@@ -15,9 +15,9 @@
     mode: 0755
   with_items:
     - "{{ kafka.conf_dir }}"
-    - "{{ kafka.app_dir }}"
     - "{{ kafka.data_dir }}"
     - "{{ kafka.log_dir }}"
+#    - "{{ kafka.app_dir }}"
 
 
 
