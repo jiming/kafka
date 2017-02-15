@@ -13,6 +13,7 @@ broker.id={{ kafka.id }}
 
 ############################# Socket Server Settings #############################
 
+listeners=PLAINTEXT://:{{ kafka.port }}
 port={{ kafka.port }}
 
 # Hostname the broker will bind to. If not set, the server will bind to all interfaces
@@ -26,7 +27,7 @@ advertised.host.name={{ kafka.aws_cluster_autodiscover.data.hostname }}
 advertised.host.name={{ kafka.advertised_host_name }}
 {% endif %}
 
-{# The number of threads handling network requests #}
+# The number of threads handling network request
 num.network.threads={{ kafka.num_network_threads }}
 
 # The number of threads doing disk I/O
