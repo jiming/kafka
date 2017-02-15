@@ -1,5 +1,10 @@
 ---
 
+- name: Ensure download folders
+  become: True
+  file: state=directory path="{{ kafka.tarball_location }}"
+
+
 - name: Ensure install folders
   become: True
   file:
@@ -13,7 +18,6 @@
     - "{{ kafka.app_dir }}"
     - "{{ kafka.data_dir }}"
     - "{{ kafka.log_dir }}"
-    - "{{ kafka.tarball_location }}"
 
 
 
@@ -28,7 +32,7 @@
   unarchive:
     copy: no
     creates: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
-    dest: "{{ kafka.tarball_location }}}"
+    dest: "{{ kafka.tarball_location }}"
     src: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
 
 - name: Link kafka to the right version
