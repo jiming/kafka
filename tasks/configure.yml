@@ -16,8 +16,8 @@
   template:
     dest: "{{ kafka.conf_dir }}/log4j.properties"
     mode: 0644
-    owner: {{ kafka.user }}
-    group: {{ kafka.group }}
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
     src: log4j.properties.j2
   notify:
     - restart kafka
@@ -27,8 +27,8 @@
   template:
     dest: "{{ kafka.conf_dir }}/server.properties"
     mode: 0640
-    owner: {{ kafka.user }}
-    group: {{ kafka.group }}
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
     src: server.properties.j2
   notify:
     - restart kafka
