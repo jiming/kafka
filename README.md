@@ -1,3 +1,7 @@
+# ref
+* [这里也有不错的配置，两个的优点结合起来](https://github.com/hpcloud-mon/ansible-kafka/)
+
+
 # Kafka
 
 Master: [![Build Status](https://travis-ci.org/sansible/kafka.svg?branch=master)](https://travis-ci.org/sansible/kafka)  

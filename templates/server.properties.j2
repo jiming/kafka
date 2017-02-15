@@ -52,6 +52,10 @@ auto.create.topics.enable={{ kafka.auto_create_topics }}
 # for consumption, but also mean more files.
 num.partitions={{ kafka.num_partitions }}
 
+# The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
+# This value is recommended to be increased for installations with data dirs located in RAID array.
+num.recovery.threads.per.data.dir=1
+
 # Set the default replication factor, set to this to the number of kafka brokers in your cluster
 default.replication.factor={{ kafka.default_replication_factor }}
 

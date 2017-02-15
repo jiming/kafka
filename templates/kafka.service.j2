@@ -1,0 +1,15 @@
+[Unit]
+Description=Kafka Daemon
+After=zookeeper.service
+
+[Service]
+Type=simple
+User={{ kafka.user }}
+Group={{ kafka.group }}
+LimitNOFILE=32768
+Restart=on-failure
+Environment="KAFKA_HEAP_OPTS={{ kafka.heap_opts }}:JMX_PORT={{ kafka.jmx_port }}"
+ExecStart={{ kafka.app_dir }}/bin/kafka-server-start.sh {{ kafka.conf_dir }}/server.properties
+
+[Install]
+WantedBy=multi-user.target

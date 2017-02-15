@@ -6,60 +6,62 @@
   file:
     state: directory
     path: "{{ item }}"
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
+    mode: 0755
   with_items:
-    - "/home/{{ kafka.user }}/bin"
-    - "/home/{{ kafka.user }}/tmp"
-    - "/home/{{ kafka.user }}/log"
-    - "/home/{{ kafka.user }}/data"
+    - "{{ kafka.conf_dir }}"
+    - "{{ kafka.app_dir }}"
+    - "{{ kafka.data_dir }}"
+    - "{{ kafka.log_dir }}"
+    - "{{ kafka.tarball_location }}"
 
-- name: Remove lost+found in the datadir
-  become: yes
-  file:
-    path: "/home/{{ kafka.user }}/data/lost+found"
-    state: absent
+
 
 - name: Fetch kafka binary package
   become: yes
-  become_user: "{{ kafka.user }}"
   get_url:
-    dest: "/home/{{ kafka.user }}/tmp/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
+    dest: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
     url: "{{ kafka.apache_mirror }}/kafka/{{ kafka.version_kafka }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
 
 - name: Uncompress the kafka tar
   become: yes
-  become_user: "{{ kafka.user }}"
   unarchive:
     copy: no
-    creates: "/home/{{ kafka.user }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
-    dest: "/home/{{ kafka.user }}"
-    src: "/home/{{ kafka.user }}/tmp/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
+    creates: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
+    dest: "{{ kafka.tarball_location }}}"
+    src: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
 
 - name: Link kafka to the right version
   become: yes
-  become_user: "{{ kafka.user }}"
   file:
-    path: "/home/{{ kafka.user }}/kafka"
-    src: "/home/{{ kafka.user }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
+    path: "{{ kafka.app_dir }}"
+    src: "{{ kafka.tarball_location }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
     state: link
 
 - name: link config dir
   become: yes
-  become_user: "{{ kafka.user }}"
   file:
     force: yes
-    path: "/home/{{ kafka.user }}/etc"
-    src: "/home/{{ kafka.user }}/kafka/config"
+    path: "{{ kafka.conf_dir }}"
+    src: "{{ kafka.app_dir }}/config"
     state: link
 
-- name: Create Kafka service
+- name: create systemd config
   become: yes
-  template:
-    dest: "{{ kafka.upstart_conf }}"
-    owner: root
-    mode: 0644
-    src: kafka.conf.j2
+  template: dest=/etc/systemd/system/kafka.service owner=root group=root mode=644 src=kafka.service.j2
   notify:
     - restart kafka
+
+# - name: Create Kafka service
+#   become: yes
+#   template:
+#     dest: "{{ kafka.upstart_conf }}"
+#     owner: root
+#     mode: 0644
+#     src: kafka.conf.j2
+#   notify:
+#     - restart kafka
     
 - name: Ensure Kafka runs on boot
   become: yes
