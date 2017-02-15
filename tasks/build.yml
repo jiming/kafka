@@ -19,7 +19,7 @@
     - "{{ kafka_conf_dir }}"
     - "{{ kafka_data_dir }}"
     - "{{ kafka_log_dir }}"
-#    - "{{ kafka_app_dir }}"
+    - "{{ kafka_app_dir }}"
 
 
 
@@ -34,15 +34,15 @@
   unarchive:
     copy: no
     creates: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
-    dest: "{{ kafka_tarball_location }}"
+    dest: "{{ kafka_app_dir }}"
     src: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
 
-- name: Link kafka to the right version
-  become: True
-  file:
-    path: "{{ kafka_app_dir }}"
-    src: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
-    state: link
+# - name: Link kafka to the right version
+#   become: True
+#   file:
+#     path: "{{ kafka_app_dir }}"
+#     src: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
+#     state: link
 
 - name: link config dir
   become: True
