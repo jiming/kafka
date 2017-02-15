@@ -2,7 +2,9 @@
 
 - name: Ensure download folders
   become: True
-  file: state=directory path="{{ kafka.tarball_location }}"
+  file: 
+    state: directory
+    path: "{{ kafka.tarball_location }}"
 
 
 - name: Ensure install folders
