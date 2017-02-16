@@ -19,7 +19,6 @@
     - "{{ kafka_conf_dir }}"
     - "{{ kafka_data_dir }}"
     - "{{ kafka_log_dir }}"
-    - "{{ kafka_app_dir }}"
 
 
 
@@ -31,12 +30,13 @@
 
 - name: Uncompress the kafka tar
   become: True
-  become_user: {{ kafka_user }}
   unarchive:
     copy: no
     creates: "{{ kafka_deploy_dir }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
     dest: "{{ kafka_deploy_dir }}"
     src: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
 
 - name: Link kafka to the right version
   become: True
