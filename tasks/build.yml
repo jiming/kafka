@@ -31,18 +31,19 @@
 
 - name: Uncompress the kafka tar
   become: True
+  become_user: {{ kafka_user }}
   unarchive:
     copy: no
-    creates: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
-    dest: "{{ kafka_app_dir }}"
+    creates: "{{ kafka_deploy_dir }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
+    dest: "{{ kafka_deploy_dir }}"
     src: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
 
-# - name: Link kafka to the right version
-#   become: True
-#   file:
-#     path: "{{ kafka_app_dir }}"
-#     src: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
-#     state: link
+- name: Link kafka to the right version
+  become: True
+  file:
+    path: "{{ kafka_app_dir }}"
+    src: "{{ kafka_deploy_dir }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
+    state: link
 
 - name: link config dir
   become: True
