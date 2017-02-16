@@ -1,19 +1,23 @@
 ---
 
+- name: Reload systemctl daemon
+  become: True
+  command: systemctl daemon-reload
+
 - name: start kafka
-  become: yes
+  become: True
   service:
     name: kafka
     state: started
 
 - name: stop kafka
-  become: yes
+  become: True
   service:
     name: kafka
     state: stopped
 
 - name: restart kafka
-  become: yes
+  become: True
   service:
     name: kafka
     state: restarted

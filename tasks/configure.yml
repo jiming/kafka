@@ -20,6 +20,7 @@
     group: "{{ kafka_group }}"
     src: log4j.properties.j2
   notify:
+    - Reload systemctl daemon
     - restart kafka
 
 - name: Create server.properties
@@ -31,6 +32,7 @@
     group: "{{ kafka_group }}"
     src: server.properties.j2
   notify:
+    - Reload systemctl daemon
     - restart kafka
 
 - name: Ensure Kafka is running
@@ -46,4 +48,4 @@
   wait_for:
     port: "{{ kafka_port }}"
     state: started
-    timeout: 120
+    timeout: 20
