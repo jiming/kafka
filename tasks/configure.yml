@@ -49,3 +49,12 @@
     port: "{{ kafka_port }}"
     state: started
     timeout: 20
+
+- name: Add Kafka binaries to PATH
+  template:
+    dest: "/etc/profile.d/kafka.sh"
+    mode: 0644
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    src: kafka.sh.j2
+
