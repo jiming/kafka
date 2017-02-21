@@ -13,7 +13,7 @@ galaxy_info:
     - development
 
 dependencies:
-  - role: sansible.users_and_groups
+  - src: sansible.users_and_groups
     version: v1.0
     users_and_groups:
       groups:
