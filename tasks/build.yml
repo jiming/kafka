@@ -52,7 +52,6 @@
     path: "{{ kafka_app_dir }}"
     src: "{{ kafka_deploy_dir }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
     state: link
-  when: kafka_app_dir_result.stat.exists == False
 
 - stat: path={{ kafka_conf_dir }}
   register: kafka_conf_dir_result
@@ -70,7 +69,6 @@
     path: "{{ kafka_conf_dir }}"
     src: "{{ kafka_app_dir }}/config"
     state: link
-  when: kafka_conf_dir_result.stat.exists == False
 
 
 - name: create systemd config
