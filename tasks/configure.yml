@@ -35,20 +35,19 @@
     - Reload systemctl daemon
     - restart kafka
 
-- name: Ensure Kafka is running
-  become: True
-  service:
-    name: kafka
-    state: started
+- name: Enable kafka service
+  service: name=kafka enabled=yes
+
+
+# - name: Ensure Kafka is running
+#   become: True
+#   service:
+#     name: kafka
+#     state: started
     
 - name: Flush handlers to ensure Kafka is up to date
   meta: flush_handlers
 
-- name: Wait for Kafka port
-  wait_for:
-    port: "{{ kafka_port }}"
-    state: started
-    timeout: 20
 
 - name: Add Kafka binaries to PATH
   template:
@@ -58,3 +57,8 @@
     group: "{{ kafka_group }}"
     src: kafka.sh.j2
 
+- name: Wait for Kafka port
+  wait_for:
+    port: "{{ kafka_port }}"
+    state: started
+    timeout: 20
