@@ -16,7 +16,6 @@
     group: "{{ kafka_group }}"
     mode: 0755
   with_items:
-    - "{{ kafka_conf_dir }}"
     - "{{ kafka_data_dir }}"
     - "{{ kafka_log_dir }}"
 
