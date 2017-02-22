@@ -41,7 +41,8 @@
   register: kafka_app_dir_result
 
 - name: unlink kafka app dir
-  command: "sudo unlink {{ kafka_app_dir }}"
+  become: True
+  command: "unlink {{ kafka_app_dir }}"
   ignore_errors: yes
   when: kafka_app_dir_result.stat.exists == True
 
@@ -57,7 +58,8 @@
   register: kafka_conf_dir_result
 
 - name: unlink kafka config dir
-  command: "sudo unlink {{ kafka_conf_dir }}"
+  become: True
+  command: "unlink {{ kafka_conf_dir }}"
   ignore_errors: yes
   when: kafka_conf_dir_result.stat.exists == True
 
