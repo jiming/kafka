@@ -1,0 +1,8 @@
+---
+- name: add group for kafka
+  group: name={{ kafka_group }}
+
+- name: add user for kafka
+  user: name={{ kafka_user }} group={{ kafka_group }} createhome=no shell=/usr/sbin/nologin state=present
+  become: True
+
