@@ -1,6 +1,7 @@
 ---
 
 kafka_apache_mirror: http://apache.mirror.anlx.net/
+kafka_download_url: "{{ kafka_apache_mirror }}/kafka/{{ kafka_version_kafka }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
 kafka_auto_create_topics: "false"
 kafka_conf_dir: /etc/kafka
 kafka_app_dir: /opt/kafka

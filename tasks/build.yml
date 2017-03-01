@@ -25,7 +25,7 @@
   become: True
   get_url:
     dest: "{{ kafka_tarball_location }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
-    url: "{{ kafka_apache_mirror }}/kafka/{{ kafka_version_kafka }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
+    url: "{{ kafka_download_url }}"
 
 - name: Uncompress the kafka tar
   become: True
